@@ -49,7 +49,7 @@ exports.getEventById = async (req, res, next) => {
 
 exports.createEvent = async (req, res, next) => {
   try {
-    const { title, description, date, locationId, curator, artworkIds, userId } = req.body; //Anarikke tilføjet (userId)
+    const { title, description, date, locationId, curator, artworkIds, userId, period } = req.body; //Anarikke tilføjet (userId og period)
 
     if (!allowedDates.includes(date)) {
       return res.status(400).json({
@@ -70,6 +70,7 @@ exports.createEvent = async (req, res, next) => {
       locationId,
       curator,
       userId, //Anarikke tilføjet
+      period, //Anarikke tilføjet
       totalTickets: location.maxGuests,
       bookedTickets: 0,
       artworkIds: artworkIds || [],
@@ -84,7 +85,9 @@ exports.createEvent = async (req, res, next) => {
 exports.updateEvent = async (req, res, next) => {
   try {
     const eventId = req.params.id;
-    const { title, date, locationId, curator, description, artworkIds } = req.body;
+    const { title, date, locationId, curator, description, artworkIds } = req.body; //Anarikke tilføjet period - og fjernet den igen
+
+    //if (period !== undefined) currentEvent.period = period; //Linje tilføjet af Anarikke
 
     // Find det event, der skal opdateres.
     const eventIndex = events.findIndex((e) => e.id === eventId);
